@@ -169,7 +169,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->figures->contains($figure)) {
             $this->figures->add($figure);
-            $figure->setFigures($this);
+            $figure->setUser($this);
         }
 
         return $this;
@@ -179,8 +179,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->figures->removeElement($figure)) {
             // set the owning side to null (unless already changed)
-            if ($figure->getFigures() === $this) {
-                $figure->setFigures(null);
+            if ($figure->getUser() === $this) {
+                $figure->setUser(null);
             }
         }
 
