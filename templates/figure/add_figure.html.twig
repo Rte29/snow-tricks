@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}Ajouter une Figure
+{% endblock %}
+{% block hero %}{% endblock %}
+
+{% block body %}
+	<div id="figure" class="container">
+		<div class="title">
+			<h1>Créez votre figure</h1>
+			<hr>
+		</div>
+		<div class="description">
+			{{ form_start(form) }}
+			<div class="title">
+				{{ form_row(form.title) }}
+			</div>
+			<div class="content">
+				{{ form_row(form.description) }}
+			</div>
+			<div class="groups">
+				{{ form_row(form.category) }}
+			</div>
+			<div class="btn-form">
+				<button type="submit" class="btn-send">Envoyer</button>
+				<a class="btn-reject" href="{{ path('app_home') }}">Annuler</a>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
+{% block preview %}{% endblock %}

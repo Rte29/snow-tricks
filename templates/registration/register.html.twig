@@ -8,9 +8,7 @@
 	</title>
 {% endblock %}
 
-{% block hero %}
-	<img class="img-fluid" src="assets/img/neige_mini.jpg" alt="panorama des alpes"/>
-{% endblock %}
+{% block hero %}{% endblock %}
 {% block body %}
 	<div class="">
 
@@ -25,7 +23,7 @@
         }) }}
 		{#  {{ form_row(registrationForm.agreeTerms) }}#}
 
-		<button type="submit" class="btn btn-primary">S'enregistrer</button>
+		<br><button type="submit" class="btn btn-primary">S'enregistrer</button>
 		{{ form_end(registrationForm) }}
 	</div>
 {% endblock %}
