@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="container px-5">
-		<a class="navbar-brand" href="/"><img class="rounded-circle img-fluid" src="assets/icone/logo.png" alt="logo" width="90x150"/>
+		<a class="navbar-brand" href="/"><img class="rounded-circle img-fluid" src="/assets/icone/logo.png" alt="logo" width="90x150"/>
 			Snow Tricks</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -16,36 +16,30 @@
 					<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Figures</a>
 					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
 						<li>
-							<a class="dropdown-item" href="{{ path('app_show-figure')}}">Voir les figures</a>
+							<a class="dropdown-item" href="{{ path('app_show_figure')}}">Voir les figures</a>
 						</li>
 						<li>
 							<a class="dropdown-item" href="{{ path('app_add_figure')}}">Ajouter une figure</a>
 						</li>
 					</ul>
 				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">S'identifier</a>
-					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-						<li>
-							<a class="dropdown-item" href="{{ path('app_login')}}">Se connecter</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="{{ path('app_register')}}">S'inscrire</a>
-						</li>
-					</ul>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
-					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-						<li>
-							<a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a>
-						</li>
-					</ul>
-				</li>
+				{% if app.user %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_logout')}}">Me deconnecter</a>
+					</li>
+					{% else%}
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">S'identifier</a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+							<li>
+								<a class="dropdown-item" href="{{ path('app_login')}}">Se connecter</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="{{ path('app_register')}}">S'inscrire</a>
+							</li>
+						</ul>
+					</li>
+				{% endif %}
 			</ul>
 		</div>
 	</div>

@@ -15,23 +15,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FigureController extends AbstractController
 {
-    #[Route('/figure', name: 'app_figure')]
-    public function index(): Response
+    #[Route('/', name: 'app_home')]
+    public function index(FigureRepository $figureRepository): Response
     {
-        return $this->render('figure/show_figure.html.twig', [
-            'controller_name' => 'FigureController',
+        $figures = [];
+        $figures = $figureRepository->findAll();
+        return $this->render('blog/home.html.twig', [
+            'figures' => $figures
         ]);
     }
 
-    #[Route('/figure/ajouter', name: 'app_add-figure')]
-    public function add(Request $request, EntityManagerInterface $manager, FigureRepository $figureRepo, CategoryRepository $categoryRepo): Response
+    #[Route('/ajouter', name: 'app_add_figure')]
+    #[Route('/{id}/modifier', name: 'app_edit_figure')]
+    public function form(Figure $figure = null, Request $request, EntityManagerInterface $manager, FigureRepository $figureRepo, CategoryRepository $categoryRepo): Response
     {
 
         if ($this->getUser() == null) {
             $this->addFlash('error', 'Vous devez être connecté');
             return $this->redirectToRoute('app_home');
         }
-        $figure = new Figure;
+        if (!$figure) {
+            $figure = new Figure;
+        }
+
         //ajout d'utilisateur en session
         $user = $this->getUser();
         $groups = $categoryRepo->findAll();
@@ -62,19 +68,29 @@ class FigureController extends AbstractController
                 }
             } while ($existSlug != null);
             $figure->setSlug($slug);
-
-            $figure->setCreatedAt(new \DateTimeImmutable());
+            if (!$figure->getId()) {
+                $figure->setCreatedAt(new \DateTimeImmutable());
+            } else {
+                $figure->setUpdateAt(new \DateTimeImmutable());
+            }
             $figure->setUser($user);
 
             $manager->persist($figure);
             $manager->flush();
             $this->addFlash("success", "La figure a bien été ajouté");
 
-            return $this->redirectToRoute('app_figure');
+            return $this->redirectToRoute('app_home');
         }
-        return $this->render('blog/add_figure.html.twig', [
+        return $this->render('figure/add_figure.html.twig', [
             'form' => $form->createView(),
+            'editMode' => $figure->getId() !== null
 
         ]);
+    }
+    #[Route('/show', name: 'app_show_figure')]
+    public function test(Request $request, EntityManagerInterface $manager, CategoryRepository $categoryRepo, FigureRepository $figureRepo): Response
+    {
+
+        return $this->render('figure/show_figure.html.twig');
     }
 }

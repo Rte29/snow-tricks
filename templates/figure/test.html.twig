@@ -7,24 +7,14 @@
 {% endblock %}
 {% block body %}
 	<div class="">
-		{% if editMode %}
-			<h1>Modifier la figure</h1>
-		{% else %}
-			<h1>Créez votre figure</h1>
-		{% endif %}
+		<h1>Créez votre figure</h1>
 	</div>
 	{{ form_start(form) }}
 	{{ form_row(form.title) }}
 	{{ form_row(form.description) }}
 	{{ form_row(form.category) }}
-	<br><button type="submit" class="btn btn-primary">
-		{% if editMode %}
-			Modifier la figure
-		{% else %}
-			Enregistrer la figure
-		{% endif %}
-	</button>
-	<a class="btn btn-secondary" href="{{ path('app_home') }}">Annuler</a>
+	<br><button type="submit" class="btn btn-primary">Envoyer</button>
+	<a class="btn btn-reject p-5" href="{{ path('app_home') }}">Annuler</a>
 
 	{{ form_end(form) }}
 </div></div>{% endblock %}{% block preview %}{% endblock %}

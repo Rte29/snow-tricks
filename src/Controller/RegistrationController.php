@@ -2,27 +2,32 @@
 
 namespace App\Controller;
 
-use App\Entity\ResetPassword;
 use App\Entity\User;
-use App\Form\ForgotPasswordType;
-use App\Form\RegistrationFormType;
+use App\Entity\Figure;
+use App\Form\FigureType;
+use App\Entity\ResetPassword;
 use App\Form\ResetPasswordType;
+use App\Form\ForgotPasswordType;
 use App\Form\RessetPasswordType;
+use Symfony\Component\Mime\Email;
+use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\UserAuthenticator;
+use Symfony\Component\Mime\Address;
+use App\Repository\FigureRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Nullable;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -60,7 +65,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             $mail = (new Email())
-                ->from("contact@snowtricks.com")
+                ->from("er.gouez@gmail.com")
                 ->to($user->getEmail())
                 ->text("Voici votre lien de verification de mail https://127.0.0.1:8000/activate/" . $token)
                 ->subject("Activation de compte sur SnowTricks pour " . $user->getUserName());
@@ -131,7 +136,7 @@ class RegistrationController extends AbstractController
                 $manager->flush();
 
                 $mail = (new Email())
-                    ->from("contact@snowtricks.com")
+                    ->from("er.gouez@gmail.com")
                     ->to($user->getEmail())
                     ->text("Voici votre lien de verification de mail https://127.0.0.1:8000/nouveau-mot-de-passe/" . $token)
                     ->subject("Activation de compte sur SnowTricks pour " . $user->getUserName());
