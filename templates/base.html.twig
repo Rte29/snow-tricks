@@ -6,9 +6,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 		<meta name="description" content=""/>
 		<meta name="author" content=""/>
-		{% block title %}
-			<title>Modern Business - Start Bootstrap Template</title>
-		{% endblock %}
+		<title>
+			{% block title %}
+				Modern Business - Start Bootstrap Template
+			{% endblock %}
+		</title>
 		<!-- Favicon-->
 		<link
 		rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
@@ -24,6 +26,15 @@
 			class="flex-shrink-0">
 			<!-- Navigation-->
 			{% include "partials/header.html.twig" %}
+			{# templates/base.html.twig #}
+
+			{# read and display all flash messages #}
+				{% for label, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="alert-{{ label }}"> {{ message }}
+					</div>
+				{% endfor %}
+			{% endfor %}
 			<!-- Header-->
 			{% block hero %}
 				<header class="py-5">
@@ -43,6 +54,7 @@
 					</div>
 				</header>
 			{% endblock %}
+
 			<div class="container"> {% block body %}{% endblock %}
 				</div>
 
@@ -157,5 +169,5 @@
 			<!-- Core theme JS-->
 			<script src="js/scripts.js"></script>
 		</body>
-
 	</html>
+</body></html>

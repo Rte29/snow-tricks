@@ -1,20 +1,12 @@
 {% extends "base.html.twig" %}
 {% block hero %}{% endblock %}
 {% block title %}
-	<title>
-		Ajouter une Figure
-	</title>
+	Ajouter une Figure
 {% endblock %}
 {% block body %}
 	<div class="">
-		<h1>Créez votre figure</h1>
+		<h1>Créez votre figure
+		</h1>
 	</div>
-	{{ form_start(form) }}
-	{{ form_row(form.title) }}
-	{{ form_row(form.description) }}
-	{{ form_row(form.category) }}
-	<br><button type="submit" class="btn btn-primary">Envoyer</button>
-	<a class="btn btn-reject p-5" href="{{ path('app_home') }}">Annuler</a>
-
-	{{ form_end(form) }}
-</div></div>{% endblock %}{% block preview %}{% endblock %}
+{% endblock %}
+{% block preview %}{% endblock %}

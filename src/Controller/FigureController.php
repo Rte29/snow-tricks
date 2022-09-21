@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Figure;
 use App\Form\FigureType;
+use App\Repository\MediaRepository;
 use App\Repository\FigureRepository;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,14 +18,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class FigureController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(FigureRepository $figureRepository): Response
+    public function index(EntityManagerInterface $em): Response
     {
-        $figures = [];
-        $figures = $figureRepository->findAll();
-        return $this->render('blog/home.html.twig', [
-            'figures' => $figures
-        ]);
+        $repo = $em->getRepository(Figure::class);
+        $figures = $repo->findAll();
+
+        return $this->render(
+            'blog/home.html.twig',
+            [
+                'controler_name' => 'FigureController',
+                'figures' => $figures,
+                'name' => 'Erwan'
+            ]
+        );
     }
+
 
     #[Route('/ajouter', name: 'app_add_figure')]
     #[Route('/{id}/modifier', name: 'app_edit_figure')]
@@ -31,7 +40,7 @@ class FigureController extends AbstractController
     {
 
         if ($this->getUser() == null) {
-            $this->addFlash('error', 'Vous devez être connecté');
+            $this->addFlash('danger', 'Vous devez être connecté pour ajouter une figure');
             return $this->redirectToRoute('app_home');
         }
         if (!$figure) {
@@ -87,6 +96,7 @@ class FigureController extends AbstractController
 
         ]);
     }
+
     #[Route('/show', name: 'app_show_figure')]
     public function test(Request $request, EntityManagerInterface $manager, CategoryRepository $categoryRepo, FigureRepository $figureRepo): Response
     {
