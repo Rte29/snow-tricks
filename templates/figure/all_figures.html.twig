@@ -2,8 +2,9 @@
 {% block title %}
 	Snow Tricks
 {% endblock %}
-
+{% block hero %}{% endblock %}
 {% block body %}
+
 	<section class="py-2">
 		<div class="container px-2 mb-5">
 			<div class="row gx-5 mb-5 justify-content-center">
@@ -23,7 +24,7 @@
 							<img class="card-img-top" src="https://dummyimage.com/600x350/ced4da/6c757d" alt="..."/>
 							<div class="card-body p-4">
 								<div class="badge bg-primary bg-gradient rounded-pill mb-2">Nouveauté</div>
-								<a class="text-decoration-none link-dark stretched-link" href="{{ path('app_show_figure', {id: figure.id}) }}">
+								<a class="text-decoration-none link-dark stretched-link" href="{{ path('app_show_figure') }}">
 									<h2 class="card-title mb-3">{{ figure.title }}</h2>
 								</a>
 								<p class="card-text mb-0">{{ figure.description }}</p>

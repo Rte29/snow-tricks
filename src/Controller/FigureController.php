@@ -21,18 +21,16 @@ class FigureController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         $repo = $em->getRepository(Figure::class);
-        $figures = $repo->findAll();
+        $figures = $repo->findBy([], ['createdAt' => 'DESC']);
 
         return $this->render(
             'blog/home.html.twig',
             [
                 'controler_name' => 'FigureController',
-                'figures' => $figures,
-                'name' => 'Erwan'
+                'figures' => $figures
             ]
         );
     }
-
 
     #[Route('/ajouter', name: 'app_add_figure')]
     #[Route('/{id}/modifier', name: 'app_edit_figure')]
@@ -97,10 +95,13 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/show', name: 'app_show_figure')]
-    public function test(Request $request, EntityManagerInterface $manager, CategoryRepository $categoryRepo, FigureRepository $figureRepo): Response
+    #[Route('/figure/{id}', name: 'app_show_figure')]
+    public function show(EntityManagerInterface $em, Figure $figure, FigureRepository $figureRepo, $id): Response
     {
-
-        return $this->render('figure/show_figure.html.twig');
+        $repo = $em->getRepository(Figure::class);
+        $figure = $repo->find($id);
+        return $this->render('figure/show_figure.html.twig', [
+            'figure' => $figure
+        ]);
     }
 }
