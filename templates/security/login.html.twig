@@ -17,29 +17,22 @@
 				<a href="{{ path('app_logout') }}">Logout</a>
 			</div>
 		{% endif %}
+		<section class="py-2">
+			<h1 class="h3 mb-3 font-weight-normal">Identifiez-vous</h1>
+			<label for="inputEmail">Email</label>
+			<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+			<label for="inputPassword">Mot de passe</label>
+			<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
-		<h1 class="h3 mb-3 font-weight-normal">Identifiez-vous</h1>
-		<label for="inputEmail">Email</label>
-		<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-		<label for="inputPassword">Password</label>
-		<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		</section>
+		<section class="d-flex py-2 ">
+			<button class="btn btn-lg btn-primary m-auto w-25" type="submit">
+				Valider
+			</button>
+			<a class="btn btn-lg btn-secondary m-auto w-25" href="{{ path('app_forgot') }}">Mot de passe oublié !</a>
+		</section>
 
-		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"><br>
-
-		{#
-																								        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-																								        See https://symfony.com/doc/current/security/remember_me.html
-																								
-																								        <div class="checkbox mb-3">
-																								            <label>
-																								                <input type="checkbox" name="_remember_me"> Remember me
-																								            </label>
-																								        </div>
-																								    #}
-
-		<button class="btn btn-lg btn-primary" type="submit">
-			Sign in
-		</button>
 	</form>
 {% endblock %}
 {% block preview %}{% endblock %}

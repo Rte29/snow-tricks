@@ -110,7 +110,7 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('all_figure');
     }
 
-    #[Route('/mot-de-passe-oublie', name: 'forgot')]
+    #[Route('/mot-de-passe-oublie', name: 'app_forgot')]
     public function forgotPassword(EntityManagerInterface $manager, MailerInterface $mailer, Request $request, UserRepository $userRepo): Response
     {
 
@@ -144,10 +144,10 @@ class RegistrationController extends AbstractController
 
                 $mailer->send($mail);
 
-                return $this->redirectToRoute('all_figure');
+                return $this->redirectToRoute('app_login');
             }
         }
-        return $this->render('forgot/forgot.html.twig', []);
+        return $this->render('security/forgot.html.twig', []);
     }
 
     #[Route('/nouveau-mot-de-passe/{token}', name: 'resset')]

@@ -35,7 +35,7 @@ class Figure
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updateAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Media::class, orphanRemoval: true, cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Media::class, orphanRemoval: true, cascade: ['remove', 'persist'])]
     private Collection $media;
 
     #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Comment::class)]

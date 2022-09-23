@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block hero %}{% endblock %}
+{% block title %}Mot de passe oublie ?
+{% endblock %}
+
+{% block body %}
+	<h1>Aide avec le mot de passe</h1>
+	<p>
+		<i>Saisissez l'adresse e-mail associée à votre compte, puis rendez-vous sur votre boite mail et cliquez sur le lien de réinitialisation de votre mot de passe.
+		</i>
+	</p>
+	<section class="py-5">
+		<div class="forgot-form">
+			<form method="post" action="{{path('app_forgot')}}">
+				<div class="block-form">
+					<div class="form-content">
+						<input type="email" class="form-control" id="email" name="email" placeholder="email" required>
+					</div>
+					<button type="submit" class="btn btn-secondary my-3 w50">Envoyer</button>
+
+				</div>
+			</form>
+		</div>
+	</section>
+{% endblock %}
+{% block preview %}{% endblock %}
+{% block footer %}{% endblock %}

@@ -12,7 +12,7 @@
 						<p class="lead fw-normal text-muted mb-3">Ce site est communautaire, il vous appartient.
 							<br>Faites le vivre, créez de nouvelles figures ou ajoutez vos commentaires
 						</p><hr>
-						<h1 class="fw-bolder p-3">Les derniers Tricks</h1>
+						<h1 id="figures" class="fw-bolder p-3">Les figures</h1>
 					</div>
 				</div>
 			</div>
@@ -22,8 +22,7 @@
 						<div class="card h-100 shadow border-0">
 							<img class="card-img-top" src="https://dummyimage.com/600x350/ced4da/6c757d" alt="..."/>
 							<div class="card-body p-4">
-								<div class="badge bg-primary bg-gradient rounded-pill mb-2">Nouveauté</div>
-								<a class="text-decoration-none link-dark stretched-link" href="{{ path('app_show_figure', {id: figure.id}) }}">
+								<a class="text-decoration-none link-dark " href="{{ path('app_show_figure', {id: figure.id}) }}">
 									<h2 class="card-title mb-3">{{ figure.title }}</h2>
 								</a>
 								<p class="card-text mb-0">{{ figure.description }}</p>
@@ -43,7 +42,7 @@
 								<div class="container">
 									<div class="row justify-content-between">
 										<div class="col-3">
-											<a><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
+											<a href="{{ path('app_edit_figure', {id: figure.id}) }}"><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
 										</div>
 										<div class="col-3 ">
 											<a><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>

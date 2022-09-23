@@ -2,18 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Media;
 use App\Entity\Figure;
 use App\Form\FigureType;
+use Doctrine\ORM\EntityManager;
 use App\Repository\MediaRepository;
 use App\Repository\FigureRepository;
 use App\Repository\CategoryRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class FigureController extends AbstractController
 {
@@ -38,19 +40,16 @@ class FigureController extends AbstractController
     {
 
         if ($this->getUser() == null) {
-            $this->addFlash('danger', 'Vous devez être connecté pour ajouter une figure');
+            $this->addFlash('danger', 'Vous devez être connecté pour ajouter ou modifier une figure');
             return $this->redirectToRoute('app_home');
         }
         if (!$figure) {
             $figure = new Figure;
         }
 
-        //ajout d'utilisateur en session
         $user = $this->getUser();
         $groups = $categoryRepo->findAll();
         $groupsFigure = [];
-
-
 
         foreach ($groups as $group) {
             $groupsFigure[$group->getFigureCategory()] = $group->getFigureCategory();
@@ -75,12 +74,42 @@ class FigureController extends AbstractController
                 }
             } while ($existSlug != null);
             $figure->setSlug($slug);
+
+            //add pictures
+            $medias = $form->get('media')->getData();
+            $counter = 0;
+            foreach ($medias as $media) {
+                $extension = $media->guessExtension();
+                $fichier = md5(uniqid()) . '.' . $media->guessExtension();
+                try {
+
+                    $media->move(
+                        $this->getParameter('figures_img_directory'),
+                        $fichier
+                    );
+                } catch (FileException $e) {
+                    //
+                }
+
+                if ($extension == 'png') {
+                    $image = 1;
+                } else {
+                    $image = 0;
+                }
+
+                $photo = new Media();
+                $photo->setUrl($slug);
+                $photo->setImage($image);
+                $figure->addMedium($photo);
+            }
+
             if (!$figure->getId()) {
                 $figure->setCreatedAt(new \DateTimeImmutable());
             } else {
                 $figure->setUpdateAt(new \DateTimeImmutable());
             }
             $figure->setUser($user);
+
 
             $manager->persist($figure);
             $manager->flush();

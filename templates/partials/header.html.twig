@@ -16,7 +16,7 @@
 					<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Figures</a>
 					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
 						<li>
-							<a class="dropdown-item" href="#">Voir les figures</a>
+							<a class="dropdown-item" href="#figures">Voir les figures</a>
 						</li>
 						<li>
 							<a class="dropdown-item" href="{{ path('app_add_figure')}}">Ajouter une figure</a>
@@ -29,10 +29,10 @@
 					</li>
 					{% else%}
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">S'identifier</a>
+						<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Se connecter</a>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
 							<li>
-								<a class="dropdown-item" href="{{ path('app_login')}}">Se connecter</a>
+								<a class="dropdown-item" href="{{ path('app_login')}}">S'identifier</a>
 							</li>
 							<li>
 								<a class="dropdown-item" href="{{ path('app_register')}}">S'inscrire</a>
