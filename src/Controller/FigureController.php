@@ -42,8 +42,8 @@ class FigureController extends AbstractController
     }
 
     #[Route('/ajouter', name: 'app_add_figure')]
-    #[Route('/{id}/modifier', name: 'app_edit_figure')]
-    public function form(Figure $figure = null, Request $request, EntityManagerInterface $manager, FigureRepository $figureRepo, CategoryRepository $categoryRepo): Response
+    #[Route('/modifier/{slug}', name: 'app_edit_figure')]
+    public function form(Figure $figure = null, Request $request, EntityManagerInterface $manager, FigureRepository $figureRepo, CategoryRepository $categoryRepo, $slug): Response
     {
 
         if ($this->getUser() == null) {
@@ -125,11 +125,11 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/figure/{id}', name: 'app_show_figure')]
-    public function show(EntityManagerInterface $em, Figure $figure, FigureRepository $figureRepo, $id): Response
+    #[Route('/figures/editer/{slug}', name: 'app_show_figure')]
+    public function show(EntityManagerInterface $em, Figure $figure, $slug): Response
     {
         $repo = $em->getRepository(Figure::class);
-        $figure = $repo->find($id);
+        $figure = $repo->findOneBy(['slug' => $slug]);
         return $this->render('figure/show_figure.html.twig', [
             'figure' => $figure
         ]);
