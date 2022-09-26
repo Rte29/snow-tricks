@@ -19,7 +19,7 @@ class SecurityController extends AbstractController
 
         if ($this->getUser()) {
 
-            $this->addFlash('danger', "Vous devez être connecté avec l'adresse: $lastUsername ");
+            $this->addFlash('danger', "Vous êtes déjà connecté avec l'adresse: $lastUsername ");
             return $this->redirectToRoute('app_home');
         }
 

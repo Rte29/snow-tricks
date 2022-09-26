@@ -157,6 +157,18 @@ class Figure
         return $this;
     }
 
+    public function getMainMedia(): ?Media
+    {
+        if ($this->media->count() > 0) {
+            foreach ($this->media as $currentMedia) {
+                if ($currentMedia->isMain()) {
+                    return $currentMedia;
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * @return Collection<int, Comment>
      */

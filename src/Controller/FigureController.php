@@ -10,6 +10,7 @@ use App\Repository\MediaRepository;
 use App\Repository\FigureRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,16 +21,22 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class FigureController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(EntityManagerInterface $em): Response
+    public function index(EntityManagerInterface $em, Request $request, PaginatorInterface $paginator): Response
     {
         $repo = $em->getRepository(Figure::class);
         $figures = $repo->findBy([], ['createdAt' => 'DESC']);
+
+        $figuresAll = $paginator->paginate(
+            $figures,
+            $request->query->getInt('page', 1),
+            6
+        );
 
         return $this->render(
             'blog/home.html.twig',
             [
                 'controler_name' => 'FigureController',
-                'figures' => $figures
+                'figures' => $figuresAll
             ]
         );
     }
@@ -77,7 +84,7 @@ class FigureController extends AbstractController
 
             //add pictures
             $medias = $form->get('media')->getData();
-            $counter = 0;
+
             foreach ($medias as $media) {
                 $extension = $media->guessExtension();
                 $fichier = md5(uniqid()) . '.' . $media->guessExtension();
@@ -91,15 +98,9 @@ class FigureController extends AbstractController
                     //
                 }
 
-                if ($extension == 'png') {
-                    $image = 1;
-                } else {
-                    $image = 0;
-                }
-
                 $photo = new Media();
-                $photo->setUrl($slug);
-                $photo->setImage($image);
+                $photo->setImage(true);
+                $photo->setUrl($fichier);
                 $figure->addMedium($photo);
             }
 
