@@ -7,6 +7,7 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -36,11 +37,15 @@ class FigureType extends AbstractType
                 'label' => 'Catégorie',
                 'choice_label' => 'figure_category'
             ])
+            ->add('video', UrlType::class, [
+                'label' => 'Ajouter une video',
+                'mapped' => false,
+                'required' => false
+            ])
             ->add('media', FileType::class, [
                 'multiple' => true,
                 'label' => 'Ajouter une photo',
-                'mapped' => false,
-                'required' => false
+                'mapped' => false
             ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Media;
 use App\Entity\Figure;
+use App\Entity\Category;
 use App\Form\FigureType;
 use Doctrine\ORM\EntityManager;
 use App\Repository\MediaRepository;
@@ -43,7 +44,7 @@ class FigureController extends AbstractController
 
     #[Route('/ajouter', name: 'app_add_figure')]
     #[Route('/modifier/{slug}', name: 'app_edit_figure')]
-    public function form(Figure $figure = null, Request $request, EntityManagerInterface $manager, FigureRepository $figureRepo, CategoryRepository $categoryRepo, $slug): Response
+    public function form(Figure $figure = null, Request $request, EntityManagerInterface $manager, FigureRepository $figureRepo, MediaRepository $mediaRepo, CategoryRepository $categoryRepo, $slug = null): Response
     {
 
         if ($this->getUser() == null) {
@@ -65,7 +66,7 @@ class FigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            //slug
             $title = $figure->getTitle();
             $slugger = new AsciiSlugger();
             $slug = strtolower($slugger->slug($title, '-'));
@@ -84,9 +85,10 @@ class FigureController extends AbstractController
 
             //add pictures
             $medias = $form->get('media')->getData();
+            $oldMain = $mediaRepo->findOneBy(['main' => true, 'figure' => $figure->getId()]);
+            $counter = 0;
 
             foreach ($medias as $media) {
-                $extension = $media->guessExtension();
                 $fichier = md5(uniqid()) . '.' . $media->guessExtension();
                 try {
 
@@ -99,9 +101,15 @@ class FigureController extends AbstractController
                 }
 
                 $photo = new Media();
+                if ($oldMain === null && $counter === 0) {
+                    $photo->setMain(true);
+                }
                 $photo->setImage(true);
                 $photo->setUrl($fichier);
                 $figure->addMedium($photo);
+
+                // main selector
+
             }
 
             if (!$figure->getId()) {
@@ -111,12 +119,17 @@ class FigureController extends AbstractController
             }
             $figure->setUser($user);
 
+            if (!$figure->getId()) {
+                $this->addFlash("success", "La figure a bien été ajouté");
+            } else {
+                $this->addFlash("success", "La modification de la figure a bien été prise en compte");
+            }
 
             $manager->persist($figure);
             $manager->flush();
-            $this->addFlash("success", "La figure a bien été ajouté");
+            $counter = $counter + 1;
 
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_show_figure', ['slug' => $slug]);
         }
         return $this->render('figure/add_figure.html.twig', [
             'form' => $form->createView(),
@@ -126,12 +139,15 @@ class FigureController extends AbstractController
     }
 
     #[Route('/figures/editer/{slug}', name: 'app_show_figure')]
-    public function show(EntityManagerInterface $em, Figure $figure, $slug): Response
+    public function show(EntityManagerInterface $em, Figure $figure, Media $media, $slug): Response
     {
         $repo = $em->getRepository(Figure::class);
         $figure = $repo->findOneBy(['slug' => $slug]);
+        $repo = $em->getRepository(Media::class);
+        $media = $repo->findAll();
         return $this->render('figure/show_figure.html.twig', [
-            'figure' => $figure
+            'figure' => $figure,
+            'media' => $media
         ]);
     }
 }

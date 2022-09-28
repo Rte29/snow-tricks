@@ -15,7 +15,12 @@
 	{{ form_row(form.title) }}
 	{{ form_row(form.description) }}
 	{{ form_row(form.category) }}
-	{{ form_row(form.media) }}
+	{{ form_row(form.video) }}
+	{% if editMode %}
+		{{ form_row(form.media, {'required': false}) }}
+	{% else %}
+		{{ form_row(form.media) }}
+	{% endif %}
 	<br><button type="submit" class="btn btn-primary">
 		{% if editMode %}
 			Modifier la figure
