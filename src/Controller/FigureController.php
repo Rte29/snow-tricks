@@ -34,7 +34,7 @@ class FigureController extends AbstractController
         $figuresAll = $paginator->paginate(
             $figures,
             $request->query->getInt('page', 1),
-            6
+            3
         );
 
         return $this->render(
@@ -162,7 +162,7 @@ class FigureController extends AbstractController
     }
 
     #[Route('/figures/editer/{slug}', name: 'app_show_figure')]
-    public function show(EntityManagerInterface $em, UserRepository $user, Request $request, Figure $figure, Media $media, $slug): Response
+    public function show(EntityManagerInterface $em, PaginatorInterface $paginator, UserRepository $user, Request $request, Figure $figure, Media $media, $slug): Response
     {
         $repo = $em->getRepository(Figure::class);
         $figure = $repo->findOneBy(['slug' => $slug]);
@@ -191,12 +191,16 @@ class FigureController extends AbstractController
             $em->persist($comment);
             $em->flush();
         }
-
+        $commentsAll = $paginator->paginate(
+            $comments,
+            $request->query->getInt('page', 1),
+            10
+        );
 
         return $this->render('figure/show_figure.html.twig', [
             'figure' => $figure,
             'media' => $media,
-            'comments' => $comments,
+            'comments' => $commentsAll,
             'commentForm' => $commentForm->createView()
         ]);
     }

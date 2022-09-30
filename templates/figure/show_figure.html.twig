@@ -70,14 +70,14 @@
 					<div class="small">
 						<div class="fw-bold">Auteur:
 							{{ figure.user.username }}</div>
-						<div class="text-muted">rédigé le:
+						<div class="text-muted">Rédigé le:
 							{{ figure.createdAt | date('d/m/Y') }}
-							&middot;
+							à
 							{{ figure.createdAt | date('H:i') }}
 							{% if figure.updateAt %}
-								~ modifié le:
+								<br>Modifié le:
 								{{ figure.updateAt | date('d/m/Y') }}
-								&middot;
+								à
 								{{ figure.updateAt | date('H:i') }}
 							{% endif %}
 						</div>
@@ -89,7 +89,7 @@
 			<!-- comments-->
 			{% if app.user %}
 				{{ form_start(commentForm) }}
-				{{ form_row(commentForm.content, {'attr': {'placeholder': "entrez votre commentaire ici", 'name': "commentaire"}}) }}
+				{{ form_row(commentForm.content, {label: 'Commentaire', attr: {'placeholder': "Entrez votre commentaire ici"}})}}
 				<br><button type="submit" class="btn btn-primary">Envoyer</button>
 				{{ form_end(commentForm)}}
 			{% endif %}
@@ -101,9 +101,12 @@
 
 					<i>écrit par :
 						{{comment.user.username}}</i>
+					le
+					{{comment.createdAt | date('d/m/Y') }}
 				</div>
 
 			{% endfor %}
 		</section>
+		{{ knp_pagination_render(comments)}}
 	{% endblock %}
 	{% block preview %}{% endblock %}

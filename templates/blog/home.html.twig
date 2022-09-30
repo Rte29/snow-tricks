@@ -23,7 +23,7 @@
 
 							<a class="text-decoration-none link-dark " href="{{ path('app_show_figure', {slug: figure.slug}) }}">
 								{% if figure.getMainMedia == null %}
-									<img class="card-img-top" src="\images\media\figures-img\header.jpg" alt="">
+									<img class="card-img-top max-width: 100%" src="\images\media\figures-img\header.jpg" alt="">
 								{% else %}
 									<img class="card-img-top" src="\images\media\figures-img\{{ figure.getMainMedia.url }}" alt="..."/>
 								{% endif %}
