@@ -50,7 +50,7 @@
 											<a href="{{ path('app_edit_figure', {slug: figure.slug}) }}"><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
 										</div>
 										<div class="col-3 ">
-											<a><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>
+											<a href="{{ path('app_delete_figure', {id: figure.id}) }}" onclick="return confirm('Vous êtes sur le point de supprimer une figure ainsi que toutes les images y référent. Cette action sera définitive. Confirmez votre choix')"><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>
 										</div>
 									</div>
 								</div>

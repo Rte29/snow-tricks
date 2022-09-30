@@ -37,7 +37,7 @@ class FigureType extends AbstractType
                 'label' => 'Catégorie',
                 'choice_label' => 'figure_category'
             ])
-            ->add('video', UrlType::class, [
+            ->add('video', TextType::class, [
                 'label' => 'Ajouter une video',
                 'mapped' => false,
                 'required' => false

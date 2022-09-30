@@ -28,6 +28,24 @@
 			Enregistrer la figure
 		{% endif %}
 	</button>
+	{% if editMode %}
+		<section class="m-5">
+			<div class="row">
+				{% for media in figure.media %}
+					<div class="col-lg-4 mb-3 pb-3">
+						{% if media.image %}
+							<img class="card-img-top" src="\images\media\figures-img\{{ media.url }}" alt="..." width="150"><a href="{{ path('app_delete_media', {id: media.id})}}">Supprimer</a>
+						{% else %}
+							<div class="video">
+								<iframe width="317" height="200" src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<a href="{{ path('app_delete_media', {id: media.id})}}">Supprimer</a>
+							</div>
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+		</section>
+	{% endif %}
 	<a class="btn btn-secondary" href="{{ path('app_home') }}">Annuler</a>
 
 	{{ form_end(form) }}

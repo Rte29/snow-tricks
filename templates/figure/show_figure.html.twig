@@ -3,13 +3,69 @@
 {% block title %}
 	{{ figure.title}}
 {% endblock %}
-{% block hero %}{% endblock %}
-{% block body %}
-	<section class="py-4">
-		<div class="container">
-			<h1 class="card-title mb-3 text-center">{{ figure.title }}</h1>
-			<div class="d-flex align-items-end justify-content-between mb-4">
-				<div class="d-flex align-items-center m-5">
+{% block hero %}
+
+	<header class="py-5">
+		<div class="container px-5" style="background-color:grey;">
+
+
+			<div class="row p-5 justify-content-between">
+				{% if app.user %}
+					<div class="col-10 w75 ">
+
+						<img class="img-fluid " src="/assets/img/header2.jpg" alt="image"/>
+
+					</div>
+					<div class="col-1">
+						<a href="{{ path('app_edit_figure', {slug: figure.slug}) }}"><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
+					</div>
+					<div class="col-1 ">
+						<a href="{{ path('app_delete_figure', {id: figure.id}) }}" onclick="return confirm('Vous êtes sur le point de supprimer une figure ainsi que toutes les images y référent. Cette action sera définitive. Confirmez votre choix')"><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>
+					</div>
+				{% else %}
+					<div class="col-12 ">
+
+						<img class="img-fluid " src="/assets/img/neige_mini.jpg" alt="image"/>
+
+					</div>
+
+				{% endif %}
+			</div>
+		</header>
+	{% endblock %}
+	{% block body %}
+		<section class="py-4">
+			<div class="container">
+				<h1 class="card-title mb-3 text-center">{{ figure.title }}</h1>
+				<section class="my-5">
+					<div class="row gx-3">
+						{% for media in figure.media %}
+							<div class="col-lg-3 mb-3 pb-3">
+								{% if media.image %}
+									<img class="card-img-top" src="\images\media\figures-img\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
+								{% else %}
+									<div class="card-img-top">
+										<iframe width="300" height="240" src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</div>
+								{% endif %}
+							</div>
+						{% endfor %}
+					</div>
+				</section>
+
+
+				<img class="img-fluid">
+
+				<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
+			</div>
+			<hr>
+
+			<div class="d-flex align-items-end justify-content-around m-4">
+
+				<h2>catégorie :
+					{{ figure.category.figureCategory }}</h2>
+
+				<div class="col-3">
 					<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..."/>
 					<div class="small">
 						<div class="fw-bold">Auteur:
@@ -27,37 +83,27 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
-			<h2>catégorie :
-				{{ figure.category.figureCategory }}</h2>
-			<section class="my-5">
-				<div class="row gx-3">
-					{% for media in figure.media %}
-						<div class="col-lg-3 mb-3 pb-3">
-							<img class="card-img-top" src="\images\media\figures-img\{{ media.url }}" alt="photo de {{ figure.title }}" width="250">
-						</div>
-					{% endfor %}
+			<hr>
+			<!-- comments-->
+			{% if app.user %}
+				{{ form_start(commentForm) }}
+				{{ form_row(commentForm.content, {'attr': {'placeholder': "entrez votre commentaire ici", 'name': "commentaire"}}) }}
+				<br><button type="submit" class="btn btn-primary">Envoyer</button>
+				{{ form_end(commentForm)}}
+			{% endif %}
+
+			{% for comment in comments %}
+
+				<div class="m-2">-
+					{{ comment.content }}<br>
+
+					<i>écrit par :
+						{{comment.user.username}}</i>
 				</div>
-			</section>
 
-
-			<img class="img-fluid">
-
-			<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
-		</div>
-		<div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-
-			<div class="container">
-				<div class="row justify-content-around">
-					<div class="col-3">
-						<a href="{{ path('app_edit_figure', {slug: figure.slug}) }}"><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
-					</div>
-					<div class="col-3 ">
-						<a><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-{% endblock %}
-{% block preview %}{% endblock %}
+			{% endfor %}
+		</section>
+	{% endblock %}
+	{% block preview %}{% endblock %}

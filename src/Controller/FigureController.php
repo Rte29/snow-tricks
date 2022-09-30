@@ -2,20 +2,24 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Media;
 use App\Entity\Figure;
+use App\Entity\Comment;
 use App\Entity\Category;
 use App\Form\FigureType;
 use Doctrine\ORM\EntityManager;
 use App\Repository\MediaRepository;
 use App\Repository\FigureRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -56,6 +60,7 @@ class FigureController extends AbstractController
         }
 
         $user = $this->getUser();
+        //category
         $groups = $categoryRepo->findAll();
         $groupsFigure = [];
 
@@ -71,6 +76,12 @@ class FigureController extends AbstractController
             $slugger = new AsciiSlugger();
             $slug = strtolower($slugger->slug($title, '-'));
             $i = 0;
+
+            $existFigure = $figureRepo->findOneBy(['title' => $title]);
+            if (!$figure->getId() && $existFigure != null) {
+                $this->addFlash('warning', 'cette figure existe déjà !');
+                return $this->redirectToRoute('app_show_figure', ['slug' => $slug]);
+            }
 
             do {
                 $existSlug = $figureRepo->findOneBy([
@@ -108,9 +119,20 @@ class FigureController extends AbstractController
                 $photo->setUrl($fichier);
                 $figure->addMedium($photo);
 
+
+
                 // main selector
 
             }
+
+            $videos = $form->get('video')->getData();
+            if ($videos != null) {
+
+                $video = new Media();
+                $video->setUrl($videos);
+                $figure->addMedium($video);
+            }
+
 
             if (!$figure->getId()) {
                 $figure->setCreatedAt(new \DateTimeImmutable());
@@ -129,25 +151,96 @@ class FigureController extends AbstractController
             $manager->flush();
             $counter = $counter + 1;
 
-            return $this->redirectToRoute('app_show_figure', ['slug' => $slug]);
+            return $this->redirectToRoute('app_home');
         }
         return $this->render('figure/add_figure.html.twig', [
             'form' => $form->createView(),
+            'figure' => $figure,
             'editMode' => $figure->getId() !== null
 
         ]);
     }
 
     #[Route('/figures/editer/{slug}', name: 'app_show_figure')]
-    public function show(EntityManagerInterface $em, Figure $figure, Media $media, $slug): Response
+    public function show(EntityManagerInterface $em, UserRepository $user, Request $request, Figure $figure, Media $media, $slug): Response
     {
         $repo = $em->getRepository(Figure::class);
         $figure = $repo->findOneBy(['slug' => $slug]);
+        $id = $figure->getId();
         $repo = $em->getRepository(Media::class);
         $media = $repo->findAll();
+        $user = $this->getUser();
+
+        $repo = $em->getRepository(Comment::class);
+        $comments = $repo->findBy(['figure' => $id]);
+        dump($comments);
+
+
+
+
+        $comment = new Comment();
+        $commentForm = $this->createFormBuilder($comment)
+            ->add('content')
+            ->getForm();
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setFigure($figure);
+            $comment->setUser($user);
+            $comment->setCreatedAt(new \DateTimeImmutable());
+            $em->persist($comment);
+            $em->flush();
+        }
+
+
         return $this->render('figure/show_figure.html.twig', [
             'figure' => $figure,
-            'media' => $media
+            'media' => $media,
+            'comments' => $comments,
+            'commentForm' => $commentForm->createView()
         ]);
+    }
+    #[Route('/supprimer/media/{id}', name: 'app_delete_media')]
+    public function deleteMedia(Media $media, EntityManagerInterface $em)
+    {
+        $slug = $media->getFigure()->getSlug();
+        $image = $media->isImage();
+
+        //récupérer l'url de l'image
+        $url = $media->getUrl();
+        if ($image != null) {
+            //supprimer l'image
+            unlink($this->getParameter('figures_img_directory') . '/' . $url);
+        }
+
+        $em->remove($media);
+        $em->flush();
+        $this->addFlash('success', 'Le media a bien été supprimée');
+
+        return $this->redirectToRoute('app_show_figure', [
+            'slug' => $slug
+        ]);
+    }
+
+    #[Route('/figures/supprimer/{id}', name: 'app_delete_figure')]
+    public function delete(EntityManagerInterface $manager, Figure $figure) //: Response
+    {
+        foreach ($figure->getMedia() as $media) {
+
+            if ($media->isImage()) {
+
+                $path = $this->getParameter('figures_img_directory') . '/' . $media->getUrl();
+
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+        }
+
+        $manager->remove($figure);
+        $manager->flush();
+        $this->addFlash('success', 'La figure a bien été supprimé');
+
+        return $this->redirectToRoute('app_home');
     }
 }
