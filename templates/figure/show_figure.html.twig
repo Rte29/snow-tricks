@@ -3,17 +3,17 @@
 {% block title %}
 	{{ figure.title}}
 {% endblock %}
-{% block hero %}
+{% block hero %}{% endblock %}
+{% block body %}
+	<div class="container">
 
-	<header class="py-5">
-		<div class="container px-5" style="background-color:grey;">
-
+		<header>
 
 			<div class="row p-5 justify-content-between">
 				{% if app.user %}
 					<div class="col-10 w75 ">
 
-						<img class="img-fluid " src="/assets/img/header2.jpg" alt="image"/>
+						<img class="img-fluid " src="/images/media/figures-img/{{figure.getMainMedia.url}}" alt="image"/>
 
 					</div>
 					<div class="col-1">
@@ -30,83 +30,111 @@
 					</div>
 
 				{% endif %}
-			</div>
-		</header>
-	{% endblock %}
-	{% block body %}
-		<section class="py-4">
-			<div class="container">
-				<h1 class="card-title mb-3 text-center">{{ figure.title }}</h1>
-				<section class="my-5">
-					<div class="row gx-3">
-						{% for media in figure.media %}
-							<div class="col-lg-3 mb-3 pb-3">
-								{% if media.image %}
-									<img class="card-img-top" src="\images\media\figures-img\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
-								{% else %}
-									<div class="card-img-top">
-										<iframe width="300" height="240" src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-									</div>
-								{% endif %}
+
+			</header>
+		</div>
+		<div class="container">
+			<h1 class="text-center">{{ figure.title }}</h1>
+			<div class="row">
+				{% for media in figure.media %}
+					<div class="col p-1 align-content-between">
+						{% if media.image %}
+							<div class="card gx-2" style=" width: 18rem; ">
+								<img class="card-img-top h-100" src="\images\media\figures-img\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
 							</div>
-						{% endfor %}
+						{% else %}
+							<div class="card gx-2" "style=" width:" 18rem;">
+								<div class="card-img-top h-100">
+									<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
+							</div>
+						{% endif %}
 					</div>
-				</section>
 
-
-				<img class="img-fluid">
-
-				<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
+				{% endfor %}
 			</div>
-			<hr>
 
-			<div class="d-flex align-items-end justify-content-around m-4">
 
-				<h2>catégorie :
-					{{ figure.category.figureCategory }}</h2>
+			<img class="img-fluid">
 
-				<div class="col-3">
-					<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..."/>
-					<div class="small">
-						<div class="fw-bold">Auteur:
-							{{ figure.user.username }}</div>
-						<div class="text-muted">Rédigé le:
-							{{ figure.createdAt | date('d/m/Y') }}
-							à
-							{{ figure.createdAt | date('H:i') }}
-							{% if figure.updateAt %}
-								<br>Modifié le:
-								{{ figure.updateAt | date('d/m/Y') }}
-								à
-								{{ figure.updateAt | date('H:i') }}
-							{% endif %}
-						</div>
-					</div>
+			<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
+		</div>
+		<div class="container">
+			<div class="row lg-align-items-end justify-content-around m-4">
+
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					catégorie :<br>
+					{{ figure.category.figureCategory }}
 				</div>
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					Auteur:<br>
+					{{ figure.user.username }}
+				</div>
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					Rédigé le:
+					{{ figure.createdAt | date('d/m/Y') }}
+					à
+					{{ figure.createdAt | date('H:i') }}
 
+				</div>
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					{% if figure.updateAt %}
+						Modifié le:
+						{{ figure.updateAt | date('d/m/Y') }}
+						à
+						{{ figure.updateAt | date('H:i') }}
+
+					{% endif %}
+
+				</div>
 			</div>
-			<hr>
-			<!-- comments-->
+
+		</div>
+		<hr>
+		<!-- comments form-->
+		<div class="row justify-content-center">
 			{% if app.user %}
-				{{ form_start(commentForm) }}
-				{{ form_row(commentForm.content, {label: 'Commentaire', attr: {'placeholder': "Entrez votre commentaire ici"}})}}
-				<br><button type="submit" class="btn btn-primary">Envoyer</button>
+				<div class="col-8">
+					{{ form_start(commentForm) }}
+
+					{{ form_row(commentForm.content, {label: 'Commentaire', attr: {'placeholder': "Entrez votre commentaire ici"}})}}
+				</div>
+				<div class="col-2 align-self-end">
+					<button type="submit" href="{{ path('app_edit_figure', {slug: figure.slug}) }}" class="btn btn-primary">Envoyer votre commentaire</button>
+				</div>
 				{{ form_end(commentForm)}}
 			{% endif %}
+		</div>
+		<hr>
 
-			{% for comment in comments %}
+		<!-- comments-->
+		<div class="row">
+			<div class="col-2"></div>
+			<div class="col-10">
+				{% for comment in comments %}
+					<div class="row">
+						<div class="col-1 align-self-center">
+							<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..."/>
+						</div>
+						<div class="col-8">
+							<div class="m-2 p-1" style="border:1px solid;">
+								{{ comment.content }}<br>
 
-				<div class="m-2">-
-					{{ comment.content }}<br>
+								<i>écrit par :
+									{{comment.user.username}}</i>
+								le
+								{{comment.createdAt | date('d/m/Y') }}
+							</div>
+						</div>
 
-					<i>écrit par :
-						{{comment.user.username}}</i>
-					le
-					{{comment.createdAt | date('d/m/Y') }}
-				</div>
+					</div>
+				{% endfor %}
+				{{ knp_pagination_render(comments)}}
+			</div>
+			<div class="col-2"></div>
+		</div>
+	</div>
 
-			{% endfor %}
-		</section>
-		{{ knp_pagination_render(comments)}}
-	{% endblock %}
-	{% block preview %}{% endblock %}
+
+{% endblock %}
+{% block preview %}{% endblock %}

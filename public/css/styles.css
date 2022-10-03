@@ -125,6 +125,10 @@ h1,
   font-size: calc(1.375rem + 1.5vw);
 }
 
+.mycard {
+  writing-mode: vertical-lr;
+}
+
 @media (min-width: 1200px) {
 
   h1,
@@ -692,6 +696,13 @@ progress {
   margin-left: auto;
 }
 
+.head {
+  float: left;
+  width: 100%;
+  padding: 10px;
+  height: 400px;
+}
+
 @media (min-width: 576px) {
 
   .container-sm,
@@ -701,6 +712,9 @@ progress {
 }
 
 @media (min-width: 768px) {
+  .mycard {
+    writing-mode: horizontal-tb;
+  }
 
   .container-md,
   .container-sm,
@@ -5270,7 +5284,7 @@ fieldset:disabled .btn {
 .card-img-top,
 .card-img-bottom {
   width: 100%;
-  height: 15vw;
+  height: 100%;
   object-fit: cover;
 
 
@@ -5495,6 +5509,8 @@ fieldset:disabled .btn {
   padding-left: 0;
   list-style: none;
 }
+
+
 
 .page-link {
   position: relative;
@@ -8753,6 +8769,10 @@ fieldset:disabled .btn {
   --bs-text-opacity: 1;
 }
 
+.bg-cover {
+  background-size: cover;
+}
+
 .bg-primary {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
@@ -10226,6 +10246,7 @@ fieldset:disabled .btn {
 }
 
 @media (min-width: 992px) {
+
   .float-lg-start {
     float: left !important;
   }

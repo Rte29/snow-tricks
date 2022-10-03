@@ -6,10 +6,9 @@ use App\Entity\User;
 use App\Entity\Figure;
 use App\Form\FigureType;
 use App\Entity\ResetPassword;
-use App\Form\ResetPasswordType;
 use App\Form\ForgotPasswordType;
-use App\Form\RessetPasswordType;
-use Symfony\Component\Mime\Email;
+use App\Form\ResetPasswordType;
+
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\UserAuthenticator;
@@ -20,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Nullable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -31,11 +31,11 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    /* protected $mailer;
-     public function __construct(MailerInterface $mailer)
-     {
-     $this->mailer = $mailer;
-     }*/
+    protected $mailer;
+    public function __construct(MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
+    }
 
     /**
      * @throws TransportExceptionInterface
@@ -65,7 +65,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             $mail = (new Email())
-                ->from("er.gouez@gmail.com")
+                ->from("snowtricksinfo@gmail.com")
                 ->to($user->getEmail())
                 ->text("Voici votre lien de verification de mail https://127.0.0.1:8000/activate/" . $token)
                 ->subject("Activation de compte sur SnowTricks pour " . $user->getUserName());
@@ -96,7 +96,7 @@ class RegistrationController extends AbstractController
         $user = $userRepo->findOneBy(['token' => $token]);
         if ($user == null) {
             $this->addFlash('error', 'Votre compte est deja activé');
-            return $this->redirectToRoute('all_figure');
+            return $this->redirectToRoute('app_home');
         }
 
         $user->setActivated('1');
@@ -107,7 +107,7 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'Votre compte est activé');
 
 
-        return $this->redirectToRoute('all_figure');
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/mot-de-passe-oublie', name: 'app_forgot')]
@@ -150,8 +150,8 @@ class RegistrationController extends AbstractController
         return $this->render('security/forgot.html.twig', []);
     }
 
-    #[Route('/nouveau-mot-de-passe/{token}', name: 'resset')]
-    public function ressetPassword(EntityManagerInterface $manager, $token, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, Request $request, UserRepository $userRepo): Response
+    #[Route('/nouveau-mot-de-passe/{token}', name: 'reset')]
+    public function resetPassword(EntityManagerInterface $manager, $token, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, Request $request, UserRepository $userRepo): Response
     {
 
         $resetPassword = new User();
@@ -159,7 +159,7 @@ class RegistrationController extends AbstractController
 
         if ($user) {
 
-            $form = $this->createForm(RessetPasswordType::class, $resetPassword);
+            $form = $this->createForm(ResetPasswordType::class, $resetPassword);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -174,7 +174,7 @@ class RegistrationController extends AbstractController
                     'Votre mot de passe a bien été modifié. Vous pouvez l\'utiliser pour vous connecter'
                 );
 
-                return $this->redirectToRoute('all_figure');
+                return $this->redirectToRoute('app_login');
             }
         } else {
 
@@ -183,9 +183,9 @@ class RegistrationController extends AbstractController
                 'Le lien de réinitialisation du mot de passe n\'est plus valide'
             );
 
-            return $this->redirectToRoute('all_figure');
+            return $this->redirectToRoute('app_home');
         }
-        return $this->render('resset/resset-password.html.twig', [
+        return $this->render('registration/reset_password.html.twig', [
             'form' => $form->createView(),
         ]);
     }

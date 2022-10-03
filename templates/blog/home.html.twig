@@ -19,7 +19,7 @@
 			<div class="row gx-5">
 				{% for figure in figures %}
 					<div class="col-lg-4 mb-5 pb-3">
-						<div class="card h-100 shadow border-0">
+						<div class="card lg-h-100 shadow border">
 
 							<a class="text-decoration-none link-dark " href="{{ path('app_show_figure', {slug: figure.slug}) }}">
 								{% if figure.getMainMedia == null %}
@@ -45,14 +45,16 @@
 									</div>
 								</div>
 								<div class="container">
-									<div class="row justify-content-between">
-										<div class="col-3">
-											<a href="{{ path('app_edit_figure', {slug: figure.slug}) }}"><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
+									{% if app.user %}
+										<div class="row justify-content-between">
+											<div class="col-3">
+												<a href="{{ path('app_edit_figure', {slug: figure.slug}) }}"><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
+											</div>
+											<div class="col-3 ">
+												<a href="{{ path('app_delete_figure', {id: figure.id}) }}" onclick="return confirm('Vous êtes sur le point de supprimer une figure ainsi que toutes les images y référent. Cette action sera définitive. Confirmez votre choix')"><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>
+											</div>
 										</div>
-										<div class="col-3 ">
-											<a href="{{ path('app_delete_figure', {id: figure.id}) }}" onclick="return confirm('Vous êtes sur le point de supprimer une figure ainsi que toutes les images y référent. Cette action sera définitive. Confirmez votre choix')"><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>
-										</div>
-									</div>
+									{% endif %}
 								</div>
 							</div>
 						</div>
