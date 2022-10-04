@@ -34,7 +34,7 @@ class FigureController extends AbstractController
         $figuresAll = $paginator->paginate(
             $figures,
             $request->query->getInt('page', 1),
-            3
+            6
         );
 
         return $this->render(
@@ -48,7 +48,7 @@ class FigureController extends AbstractController
 
     #[Route('/ajouter', name: 'app_add_figure')]
     #[Route('/modifier/{slug}', name: 'app_edit_figure')]
-    public function form(Figure $figure = null, Request $request, EntityManagerInterface $manager, FigureRepository $figureRepo, MediaRepository $mediaRepo, CategoryRepository $categoryRepo, $slug = null): Response
+    public function form(Figure $figure = null, Request $request, EntityManagerInterface $em, FigureRepository $figureRepo, MediaRepository $mediaRepo, CategoryRepository $categoryRepo, $slug = null): Response
     {
 
         if ($this->getUser() == null) {
@@ -118,12 +118,8 @@ class FigureController extends AbstractController
                 $photo->setImage(true);
                 $photo->setUrl($fichier);
                 $figure->addMedium($photo);
-
-
-
-                // main selector
-
             }
+            // main selector
 
             $videos = $form->get('video')->getData();
             if ($videos != null) {
@@ -147,8 +143,8 @@ class FigureController extends AbstractController
                 $this->addFlash("success", "La modification de la figure a bien été prise en compte");
             }
 
-            $manager->persist($figure);
-            $manager->flush();
+            $em->persist($figure);
+            $em->flush();
             $counter = $counter + 1;
 
             return $this->redirectToRoute('app_home');
@@ -205,7 +201,7 @@ class FigureController extends AbstractController
         ]);
     }
     #[Route('/supprimer/media/{id}', name: 'app_delete_media')]
-    public function deleteMedia(Media $media, EntityManagerInterface $em)
+    public function deleteMedia(Media $media, EntityManagerInterface $em, MediaRepository $mediaRepo,)
     {
         $slug = $media->getFigure()->getSlug();
         $image = $media->isImage();
@@ -219,7 +215,20 @@ class FigureController extends AbstractController
 
         $em->remove($media);
         $em->flush();
-        $this->addFlash('success', 'Le media a bien été supprimée');
+        // gestion mainMedia
+        $figure = $media->getFigure();
+        $oldMain = $mediaRepo->findOneBy(['main' => true, 'figure' => $figure->getId()]);
+        $newMain = $mediaRepo->findOneBy(['figure' => $figure->getId()]);
+        dump($oldMain);
+        dump($newMain);
+
+        if ($oldMain === null) {
+            $newMain->setMain(true);
+            $em->persist($figure);
+            $em->flush();
+        }
+
+        $this->addFlash('success', 'Le media a bien été supprimé');
 
         return $this->redirectToRoute('app_show_figure', [
             'slug' => $slug
@@ -227,7 +236,7 @@ class FigureController extends AbstractController
     }
 
     #[Route('/figures/supprimer/{id}', name: 'app_delete_figure')]
-    public function delete(EntityManagerInterface $manager, Figure $figure) //: Response
+    public function delete(EntityManagerInterface $em, Figure $figure) //: Response
     {
         foreach ($figure->getMedia() as $media) {
 
@@ -241,8 +250,8 @@ class FigureController extends AbstractController
             }
         }
 
-        $manager->remove($figure);
-        $manager->flush();
+        $em->remove($figure);
+        $em->flush();
         $this->addFlash('success', 'La figure a bien été supprimé');
 
         return $this->redirectToRoute('app_home');

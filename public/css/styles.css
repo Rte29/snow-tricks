@@ -2240,6 +2240,10 @@ progress {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+
+  .test {
+    display: none;
+  }
 }
 
 @media (max-width: 991.98px) {

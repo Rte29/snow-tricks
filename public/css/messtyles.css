@@ -1,0 +1,11 @@
+.test {
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 400px;
+    color: black;
+}
+
+.taillepolice {
+    font-size: 800%;
+
+}
