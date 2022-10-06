@@ -125,10 +125,6 @@ h1,
   font-size: calc(1.375rem + 1.5vw);
 }
 
-.mycard {
-  writing-mode: vertical-lr;
-}
-
 @media (min-width: 1200px) {
 
   h1,
@@ -712,9 +708,6 @@ progress {
 }
 
 @media (min-width: 768px) {
-  .mycard {
-    writing-mode: horizontal-tb;
-  }
 
   .container-md,
   .container-sm,

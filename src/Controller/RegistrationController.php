@@ -100,7 +100,9 @@ class RegistrationController extends AbstractController
         }
 
         $user->setActivated('1');
-        $user->setToken(null);
+        $token = bin2hex(random_bytes(16));
+        $user->setToken($token);
+
 
         $manager->persist($user);
         $manager->flush();
@@ -150,7 +152,7 @@ class RegistrationController extends AbstractController
         return $this->render('security/forgot.html.twig', []);
     }
 
-    #[Route('/nouveau-mot-de-passe/{token}', name: 'reset')]
+    #[Route('/nouveau-mot-de-passe/{token}', name: 'app_reset')]
     public function resetPassword(EntityManagerInterface $manager, $token, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, Request $request, UserRepository $userRepo): Response
     {
 
@@ -164,7 +166,8 @@ class RegistrationController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //TODO set token a null
-                $user->setToken(null)
+                $token = bin2hex(random_bytes(16));
+                $user->setToken($token)
                     ->setPassword($passwordHasher->hashPassword($user, $resetPassword->getPassword()));
 
                 $manager->persist($user);
@@ -174,7 +177,7 @@ class RegistrationController extends AbstractController
                     'Votre mot de passe a bien été modifié. Vous pouvez l\'utiliser pour vous connecter'
                 );
 
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_home');
             }
         } else {
 

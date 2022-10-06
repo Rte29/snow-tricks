@@ -1,7 +1,11 @@
 {% extends "base.html.twig" %}
 {% block hero %}{% endblock %}
 {% block title %}
-	Ajouter une Figure
+	{% if editMode %}
+		Modifier la figure
+	{% else %}
+		Créez votre figure
+	{% endif %}
 {% endblock %}
 {% block body %}
 	{% if editMode %}
@@ -11,54 +15,55 @@
 					<div class="col-lg-3 mb-3 pb-3">
 						<div class="card h-100">
 							{% if media.image %}
-								<img class="card-img-top" width="180" heigth="50" src="\images\media\figures-img\{{ media.url }}" alt="..."><a href="{{ path('app_delete_media', {id: media.id})}}">
-									<div class="card-body" width="240">
-										<a href="{{ path('app_delete_media', {id: media.id})}}" onclick="return confirm('Vous allez supprimer le média. Confirmez votre choix')"><img class="img-fluid" src="/assets/icone/poubelle.png" alt="logo" width="20*20"/></a>
-									</div>
-								{% else %}
-									<div class="video">
-										<div class="card-img-top" width="240">
-											<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-										</div>
-										<div class="card-body" width="240">
-											<a href="{{ path('app_delete_media', {id: media.id})}}"><img class="img-fluid" src="/assets/icone/poubelle.png" alt="logo" width="20*20"/></a>
-										</div>
+								<img class="card-img-top" width="180" heigth="50" src="\images\media\{{ media.url }}" alt="..."><a href="{{ path('app_delete_media', {id: media.id})}}"></a>
+								<div class="card-body" width="240">
+									<a href="{{ path('app_delete_media', {id: media.id})}}" onclick="return confirm('Vous allez supprimer le média. Confirmez votre choix')"><img class="img-fluid" src="/assets/icone/poubelle.png" alt="logo" width="20*20"/></a>
+								</div>
+							{% else %}
+								<div class="card-img-top">
+									<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" heigth="50" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
+								<div class="card-body" width="240">
+									<a href="{{ path('app_delete_media', {id: media.id})}}"><img class="img-fluid" onclick="return confirm('Vous allez supprimer le média. Confirmez votre choix')" src="/assets/icone/poubelle.png" alt="logo" width="20*20"/></a>
+								</div>
 
-									</div>
-								{% endif %}
-							</div>
+							{% endif %}
 						</div>
-					{% endfor %}
-				</div>
-			</section>
-		{% endif %}
-		<div class="">
+					</div>
+				{% endfor %}
+			</div>
+		</section>
+
+	{% endif %}
+	<div class="mycontainer">
+		<div class="row">
+
+			{{ form_start(form) }}
+			<div class="col-6">
+				{{ form_row(form.title) }}
+			</div>
+			{{ form_row(form.description) }}
+			<div class="col-3">
+				{{ form_row(form.category) }}
+			</div>
+			{{ form_row(form.video) }}
 			{% if editMode %}
-				<h1>Modifier la figure</h1>
+				{{ form_row(form.media, {'required': false}) }}
 			{% else %}
-				<h1>Créez votre figure</h1>
+				{{ form_row(form.media) }}
 			{% endif %}
+			<br>
+			<button type="submit" class="btn btn-primary">
+				{% if editMode %}
+					Modifier la figure
+				{% else %}
+					Enregistrer la figure
+				{% endif %}
+			</button>
+
+			<a class="btn btn-secondary" href="{{ path('app_home') }}">Annuler</a>
+
+			{{ form_end(form) }}
 		</div>
-		{{ form_start(form) }}
-		{{ form_row(form.title) }}
-		{{ form_row(form.description) }}
-		{{ form_row(form.category) }}
-		{{ form_row(form.video) }}
-		{% if editMode %}
-			{{ form_row(form.media, {'required': false}) }}
-		{% else %}
-			{{ form_row(form.media) }}
-		{% endif %}
-		<br><button type="submit" class="btn btn-primary">
-			{% if editMode %}
-				Modifier la figure
-			{% else %}
-				Enregistrer la figure
-			{% endif %}
-		</button>
-
-		<a class="btn btn-secondary" href="{{ path('app_home') }}">Annuler</a>
-
-		{{ form_end(form) }}
 	</div>
-</div>{% endblock %}{% block preview %}{% endblock %}
+{% endblock %}

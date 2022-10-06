@@ -34,7 +34,7 @@ class FigureController extends AbstractController
         $figuresAll = $paginator->paginate(
             $figures,
             $request->query->getInt('page', 1),
-            6
+            3
         );
 
         return $this->render(
@@ -42,6 +42,18 @@ class FigureController extends AbstractController
             [
                 'controler_name' => 'FigureController',
                 'figures' => $figuresAll
+            ]
+        );
+    }
+
+    #[Route('/profil', name: 'app_profil')]
+    public function profil(): Response
+    {
+        $user = $this->getUser();
+        return $this->render(
+            'registration/profil.html.twig',
+            [
+                'user' => $user
             ]
         );
     }
@@ -167,12 +179,6 @@ class FigureController extends AbstractController
         $media = $repo->findAll();
         $user = $this->getUser();
 
-        $repo = $em->getRepository(Comment::class);
-        $comments = $repo->findBy(['figure' => $id]);
-        dump($comments);
-
-
-
 
         $comment = new Comment();
         $commentForm = $this->createFormBuilder($comment)
@@ -187,6 +193,9 @@ class FigureController extends AbstractController
             $em->persist($comment);
             $em->flush();
         }
+
+        $repo = $em->getRepository(Comment::class);
+        $comments = $repo->findBy(['figure' => $id], ['createdAt' => 'DESC']);
         $commentsAll = $paginator->paginate(
             $comments,
             $request->query->getInt('page', 1),
@@ -215,9 +224,10 @@ class FigureController extends AbstractController
 
         $em->remove($media);
         $em->flush();
+
         // gestion mainMedia
         $figure = $media->getFigure();
-        $oldMain = $mediaRepo->findOneBy(['main' => true, 'figure' => $figure->getId()]);
+        $oldMain = $mediaRepo->findOneBy(['main' => true, 'image' => true, 'figure' => $figure->getId()]);
         $newMain = $mediaRepo->findOneBy(['figure' => $figure->getId()]);
         dump($oldMain);
         dump($newMain);
@@ -255,5 +265,17 @@ class FigureController extends AbstractController
         $this->addFlash('success', 'La figure a bien été supprimé');
 
         return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/privee', name: 'app_private')]
+    public function private(): Response
+    {
+        return $this->render('partials/private.html.twig');
+    }
+
+    #[Route('/contact', name: 'app_contact')]
+    public function contact(): Response
+    {
+        return $this->render('partials/contact.html.twig');
     }
 }

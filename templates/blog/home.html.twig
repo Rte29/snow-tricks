@@ -23,9 +23,9 @@
 
 							<a class="text-decoration-none link-dark " href="{{ path('app_show_figure', {slug: figure.slug}) }}">
 								{% if figure.getMainMedia == null %}
-									<img class="card-img-top max-width: 100%" src="\images\media\figures-img\header.jpg" alt="">
+									<img class="card-img-top max-width: 100%" src="\images\media\header.jpg" alt="">
 								{% else %}
-									<img class="card-img-top" src="\images\media\figures-img\{{ figure.getMainMedia.url }}" alt="..."/>
+									<img class="card-img-top" src="\images\media\{{ figure.getMainMedia.url }}" alt="..."/>
 								{% endif %}
 								<div class="card-body p-4">
 									<h2 class="card-title mb-3">{{ figure.title }}</h2>
@@ -67,4 +67,3 @@
 	</section>
 	{{ knp_pagination_render(figures)}}
 {% endblock %}
-{% block preview %}{% endblock %}

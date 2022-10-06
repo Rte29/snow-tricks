@@ -6,6 +6,49 @@
 }
 
 .taillepolice {
-    font-size: 800%;
+    font-size: 400%;
+    color: rgb(255, 136, 0)
+}
 
+@media (min-width: 1200px) {
+
+    .taillepolice {
+        font-size: 800%;
+        color: rgb(255, 136, 0)
+    }
+}
+
+.modifform {
+    border: 1px;
+}
+
+.card-text {
+    min-height: 55px;
+}
+
+.mycontainer {
+    margin-left: 5rem;
+    margin-right: 5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 1200px) {
+    .mycontainer {
+        margin-left: 15rem;
+        margin-right: 15rem;
+        margin-bottom: 1.5rem;
+    }
+
+}
+
+@media(max-width: 800px) {
+    .masquer {
+        display: none;
+    }
+}
+
+@media(min-width: 800px) {
+    .afficher {
+        display: none;
+    }
 }

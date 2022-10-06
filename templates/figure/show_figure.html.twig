@@ -7,131 +7,138 @@
 {% block hero %}
 	<section>
 		<div class="container my-5">
-
-			<div class="row" style="background-image: url('/assets/img/{{figure.getMainMedia.url}}'); background-size: cover; min-height:400px;">
-				<div class="col-10 align-self-center text-center">
-					<p class="taillepolice">{{figure.title}}</p>
-
-				</div>
-				{% if app.user %}
-					<div class="col-2 mt-5 text-center">
-						<a href=" {{ path('app_delete_figure', {id: figure.id} ) }}" onclick=" return confirm('vous êtes sur le point de supprimer une figure ainsi que toutes les images y référent. cette action sera définitive. confirmez votre choix')"><img class="img-fluid text-right" src="/assets/icone/poubelle.png" alt="logo" width="40*40"/></a>
-
-
-						<a href="{{ path('app_edit_figure', {slug: figure.slug}) }}"><img class="img-fluid" src="/assets/icone/stylo.png" alt="logo" width="40*40"/></a>
-
+			{% if figure.getMainMedia %}
+				<div class="row" style="background-image: url('/images/media/{{figure.getMainMedia.url}}'); background-size: cover; min-height:400px;">
+					<div class="col-10 align-self-center text-center">
+						<p class="taillepolice">{{figure.title}}</p>
 					</div>
 				{% else %}
-					<div class="col-12 "></div>
-
-				{% endif %}
-
-
-			</div>
-		</div>
-	</section>
-{% endblock %}
-{% block body %}
-
-
-	<div class="container">
-
-		<div class="row">
-			{% for media in figure.media %}
-				<div class="col p-1 align-content-center">
-					{% if media.image %}
-						<div class="card gx-2" style=" width: 18rem; ">
-							<img class="card-img-top h-100" src="\images\media\figures-img\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
-						</div>
-					{% else %}
-						<div class="card gx-2" "style=" width:" 18rem;">
-							<div class="card-img-top h-100">
-								<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-							</div>
+					<div class="row" style="background-image: url('/assets/img/neige.jpg'); background-size: cover; min-height:400px;">
+						<div class="col-10 align-self-center text-center">
+							<p class="taillepolice">{{figure.title}}</p>
 						</div>
 					{% endif %}
-				</div>
-
-			{% endfor %}
-		</div>
-
-
-		<img class="img-fluid">
-
-		<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
-	</div>
-	<div class="container">
-		<div class="row lg-align-items-end justify-content-around m-4">
-
-			<div class="col-lg-2 text-center" style="border:1px solid;">
-				catégorie :<br>
-				{{ figure.category.figureCategory }}
-			</div>
-			<div class="col-lg-2 text-center" style="border:1px solid;">
-				Auteur:<br>
-				{{ figure.user.username }}
-			</div>
-			<div class="col-lg-2 text-center" style="border:1px solid;">
-				Rédigé le:
-				{{ figure.createdAt | date('d/m/Y') }}
-				à
-				{{ figure.createdAt | date('H:i') }}
-
-			</div>
-			<div class="col-lg-2 text-center" style="border:1px solid;">
-				{% if figure.updateAt %}
-					Modifié le:
-					{{ figure.updateAt | date('d/m/Y') }}
-					à
-					{{ figure.updateAt | date('H:i') }}
-
-				{% endif %}
-
-			</div>
-		</div>
-
-	</div>
-	<hr>
-	<!-- comments form-->
-	<div class="row justify-content-center">
-		{% if app.user %}
-			<div class="col-8">
-				{{ form_start(commentForm) }}
-
-				{{ form_row(commentForm.content, {label: 'Commentaire', attr: {'placeholder': "Entrez votre commentaire ici"}})}}
-			</div>
-			<div class="col-2 align-self-end">
-				<button type="submit" href="{{ path('app_edit_figure', {slug: figure.slug}) }}" class="btn btn-primary">Envoyer votre commentaire</button>
-			</div>
-			{{ form_end(commentForm)}}
-		{% endif %}
-	</div>
-	<hr>
-
-	<!-- comments-->
-	<div class="row">
-		<div class="col-2"></div>
-		<div class="col-10">
-			{% for comment in comments %}
-				<div class="row">
-					<div class="col-1 align-self-center">
-						<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..."/>
-					</div>
-					<div class="col-8">
-						<div class="m-2 p-1" style="border:1px solid;">
-							{{ comment.content }}<br>
-
-							<i>écrit par :
-								{{comment.user.username}}</i>
-							le
-							{{comment.createdAt | date('d/m/Y') }}
+					<!--affichage icones -->
+					{% if app.user %}
+						<div class="col-2 mt-5 text-center">
+							<a href="{{ path('app_edit_figure', {slug: figure.slug}) }}"><img class="img-fluid p-2" src="/assets/icone/stylo_orange.png" alt="logo modifier"/></a>
+							<a href=" {{ path('app_delete_figure', {id: figure.id} ) }}" onclick=" return confirm('vous êtes sur le point de supprimer une figure ainsi que toutes les images y référent. cette action sera définitive. confirmez votre choix')"><img class="img-fluid text-right" src="/assets/icone/poubelle_orange.png" alt="logo supprimer"/></a>
 						</div>
-					</div>
+					{% else %}
+						<div class="col-12 "></div>
+
+					{% endif %}
+
 
 				</div>
-			{% endfor %}
-			{{ knp_pagination_render(comments)}}
+			</div>
+		</section>
+	{% endblock %}
+	{% block body %}
+
+
+		<div class="container">
+
+			<div class="row">
+				<div class="row justify-content-center">
+					<a class="btn btn-primary col-6 afficher">Afficher les medias</a>
+				</div>
+				{% for media in figure.media %}
+					<div class="col p-1 masquer">
+						{% if media.image %}
+							<div class="card gx-2" style=" width: 18rem; ">
+								<img class="card-img-top h-100" src="\images\media\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
+							</div>
+						{% else %}
+							<div class="card gx-2" "style=" width:" 18rem;">
+								<div class="card-img-top h-100">
+									<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+
+				{% endfor %}
+			</div>
+
+
+			<img class="img-fluid">
+
+			<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
 		</div>
-		<div class="col-2"></div>
+		<div class="container">
+			<div class="row lg-align-items-end justify-content-around m-4">
+
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					catégorie :<br>
+					{{ figure.category.figureCategory }}
+				</div>
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					Auteur:<br>
+					{{ figure.user.username }}
+				</div>
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					Rédigé le:
+					{{ figure.createdAt | date('d/m/Y') }}
+					à
+					{{ figure.createdAt | date('H:i') }}
+
+				</div>
+				<div class="col-lg-2 text-center" style="border:1px solid;">
+					{% if figure.updateAt %}
+						Modifié le:
+						{{ figure.updateAt | date('d/m/Y') }}
+						à
+						{{ figure.updateAt | date('H:i') }}
+
+					{% endif %}
+
+				</div>
+			</div>
+
+		</div>
+		<hr>
+		<!-- comments form-->
+		<div class="row justify-content-center">
+			{% if app.user %}
+				<div class="col-sm-12 col-lg-8">
+					{{ form_start(commentForm) }}
+
+					{{ form_row(commentForm.content, {label: 'Commentaire', value: null, attr: {'placeholder': "Entrez votre commentaire ici"}})}}
+				</div>
+				<div class="col-2 align-self-end">
+					<button type="submit" href="{{ path('app_show_figure', {slug: figure.slug}) }}" class="btn btn-primary">Envoyer</button>
+				</div>
+				{{ form_end(commentForm)}}
+			{% endif %}
+		</div>
+		<hr>
+
+		<!-- comments-->
+		<div class="row">
+			<div class="col-2"></div>
+			<div class="col-10">
+				{% for comment in comments %}
+					<div class="row">
+						<div class="col-1 align-self-center">
+							<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..."/>
+						</div>
+						<div class="col-8">
+							<div class="m-2 p-1" style="border:1px solid;">
+								{{ comment.content }}<br>
+
+								<i>écrit par :
+									{{comment.user.username}}</i>
+								le
+								{{comment.createdAt | date('d/m/Y') }}
+							</div>
+						</div>
+
+					</div>
+				{% endfor %}
+				{{ knp_pagination_render(comments)}}
+			</div>
+			<div class="col-2"></div>
+		</div>
 	</div>
-</div>{% endblock %}{% block preview %}{% endblock %}
+{% endblock %}

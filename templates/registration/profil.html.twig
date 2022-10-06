@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Mon profil
+{% endblock %}
+{% block hero %}{% endblock %}
+{% block body %}
+	<div class="container mt-5">
+		mon pseudo:
+		<h2>{{user.username}}</h2>
+		mon email :
+		<h2>{{ user.email}}</h2><br>
+		<a href="{{ path('app_reset', {token: user.token}) }}" class="btn btn-primary">Réinitialiser mon mot de passe</a>
+	</div>
+{% endblock %}
