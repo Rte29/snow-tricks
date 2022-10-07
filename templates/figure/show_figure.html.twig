@@ -8,7 +8,7 @@
 	<section>
 		<div class="container my-5">
 			{% if figure.getMainMedia %}
-				<div class="row" style="background-image: url('/images/media/{{figure.getMainMedia.url}}'); background-size: cover; min-height:400px;">
+				<div class="row my-5" style="background-image: url('/images/media/{{figure.getMainMedia.url}}'); background-size: cover; min-height:400px;">
 					<div class="col-10 align-self-center text-center">
 						<p class="taillepolice">{{figure.title}}</p>
 					</div>
@@ -28,8 +28,6 @@
 						<div class="col-12 "></div>
 
 					{% endif %}
-
-
 				</div>
 			</div>
 		</section>
@@ -40,68 +38,68 @@
 		<div class="container">
 
 			<div class="row">
-				<div class="row justify-content-center">
-					<a class="btn btn-primary col-6 afficher">Afficher les medias</a>
+				<div class="row p-3 justify-content-center afficher">
+					<span id="cacher" class="btn btn-primary col-6 afficher" onclick="document.getElementById('afficher').style.display='block'; document.getElementById('cacher').style.display='none'; document.getElementById('montrer').style.display='block'">Afficher les medias</span>
+					<span id="montrer" class="btn btn-primary col-6 masquer" onclick="document.getElementById('afficher').style.display='none'; document.getElementById('cacher').style.display='block'; document.getElementById('montrer').style.display='none'">Masquer les medias</span>
 				</div>
+			</div>
+			<div class="row masquer justify-content-center" id="afficher">
 				{% for media in figure.media %}
-					<div class="col p-1 masquer">
-						{% if media.image %}
-							<div class="card gx-2" style=" width: 18rem; ">
-								<img class="card-img-top h-100" src="\images\media\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
+					{% if media.image %}
+						<div class="card gx-2 m-3" style=" width: 18rem; ">
+							<img class="card-img-top h-100" src="\images\media\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
+						</div>
+					{% else %}
+						<div class="card gx-2" "style=" width:" 18rem;">
+							<div class="card-img-top h-100">
+								<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
-						{% else %}
-							<div class="card gx-2" "style=" width:" 18rem;">
-								<div class="card-img-top h-100">
-									<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-								</div>
-							</div>
-						{% endif %}
-					</div>
-
+						</div>
+					{% endif %}
 				{% endfor %}
 			</div>
-
-
-			<img class="img-fluid">
-
-			<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
 		</div>
-		<div class="container">
-			<div class="row lg-align-items-end justify-content-around m-4">
 
-				<div class="col-lg-2 text-center" style="border:1px solid;">
-					catégorie :<br>
-					{{ figure.category.figureCategory }}
-				</div>
-				<div class="col-lg-2 text-center" style="border:1px solid;">
-					Auteur:<br>
-					{{ figure.user.username }}
-				</div>
-				<div class="col-lg-2 text-center" style="border:1px solid;">
-					Rédigé le:
-					{{ figure.createdAt | date('d/m/Y') }}
-					à
-					{{ figure.createdAt | date('H:i') }}
 
-				</div>
-				<div class="col-lg-2 text-center" style="border:1px solid;">
-					{% if figure.updateAt %}
-						Modifié le:
-						{{ figure.updateAt | date('d/m/Y') }}
-						à
-						{{ figure.updateAt | date('H:i') }}
+		<p class="card-text mb-0 text-justify">{{ figure.description | nl2br }}</p>
+	</div>
+	<div class="container">
+		<div class="row lg-align-items-end justify-content-around m-4">
 
-					{% endif %}
-
-				</div>
+			<div class="col-lg-2 text-center mb-2" style="border:1px solid;">
+				catégorie :<br>
+				{{ figure.category.figureCategory }}
 			</div>
+			<div class="col-lg-2 text-center mb-2" style="border:1px solid;">
+				Auteur:<br>
+				{{ figure.user.username }}
+			</div>
+			<div class="col-lg-2 text-center mb-2" style="border:1px solid;">
+				Rédigé le:
+				{{ figure.createdAt | date('d/m/Y') }}
+				à
+				{{ figure.createdAt | date('H:i') }}
 
+			</div>
+			<div class="col-lg-2 text-center" style="border:1px solid;">
+				{% if figure.updateAt %}
+					Modifié le:
+					{{ figure.updateAt | date('d/m/Y') }}
+					à
+					{{ figure.updateAt | date('H:i') }}
+
+				{% endif %}
+
+			</div>
 		</div>
-		<hr>
-		<!-- comments form-->
+
+	</div>
+	<hr>
+	<!-- comments form-->
+	<div class="container">
 		<div class="row justify-content-center">
 			{% if app.user %}
-				<div class="col-sm-12 col-lg-8">
+				<div class="col-md-10 col-lg-8 mb-2">
 					{{ form_start(commentForm) }}
 
 					{{ form_row(commentForm.content, {label: 'Commentaire', value: null, attr: {'placeholder': "Entrez votre commentaire ici"}})}}
@@ -112,33 +110,33 @@
 				{{ form_end(commentForm)}}
 			{% endif %}
 		</div>
-		<hr>
-
-		<!-- comments-->
-		<div class="row">
-			<div class="col-2"></div>
-			<div class="col-10">
-				{% for comment in comments %}
-					<div class="row">
-						<div class="col-1 align-self-center">
-							<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..."/>
-						</div>
-						<div class="col-8">
-							<div class="m-2 p-1" style="border:1px solid;">
-								{{ comment.content }}<br>
-
-								<i>écrit par :
-									{{comment.user.username}}</i>
-								le
-								{{comment.createdAt | date('d/m/Y') }}
-							</div>
-						</div>
-
-					</div>
-				{% endfor %}
-				{{ knp_pagination_render(comments)}}
-			</div>
-			<div class="col-2"></div>
-		</div>
 	</div>
-{% endblock %}
+	<hr>
+
+	<!-- comments-->
+	<div class="row">
+		<div class="col-2"></div>
+		<div class="col-10">
+			{% for comment in comments %}
+				<div class="row">
+					<div class="col-1 align-self-center">
+						<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..."/>
+					</div>
+					<div class="col-8">
+						<div class="m-2 p-1" style="border:1px solid;">
+							{{ comment.content }}<br>
+
+							<i>écrit par :
+								{{comment.user.username}}</i>
+							le
+							{{comment.createdAt | date('d/m/Y') }}
+						</div>
+					</div>
+
+				</div>
+			{% endfor %}
+			{{ knp_pagination_render(comments)}}
+		</div>
+		<div class="col-2"></div>
+	</div>
+</div>{% endblock %}

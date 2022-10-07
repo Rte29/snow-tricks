@@ -34,7 +34,7 @@ class FigureController extends AbstractController
         $figuresAll = $paginator->paginate(
             $figures,
             $request->query->getInt('page', 1),
-            3
+            6
         );
 
         return $this->render(

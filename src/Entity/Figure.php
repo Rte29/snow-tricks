@@ -38,7 +38,7 @@ class Figure
     #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Media::class, orphanRemoval: true, cascade: ['remove', 'persist'])]
     private Collection $media;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Comment::class, orphanRemoval: true, cascade: ['remove', 'persist'])]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'figures')]
