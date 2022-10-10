@@ -105,6 +105,13 @@ class FigureController extends AbstractController
 
 
 
+            if ($existFigure != null) {
+                if ($figure->getId() != $existFigure->getId()) {
+                    $this->addFlash('warning', 'cette figure existe déjà !');
+                    return $this->redirectToRoute('app_show_figure', ['slug' => $slug]);
+                }
+            }
+
             do {
                 $existSlug = $figureRepo->findOneBy([
                     'slug' => $slug
