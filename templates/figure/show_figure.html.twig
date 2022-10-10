@@ -50,7 +50,7 @@
 							<img class="card-img-top h-100" src="\images\media\{{ media.url }}" alt="photo de {{ figure.title }}" width="50">
 						</div>
 					{% else %}
-						<div class="card gx-2" "style=" width:" 18rem;">
+						<div class="card gx-2 m-3" style=" width: 18rem;">
 							<div class="card-img-top h-100">
 								<iframe src="https://www.youtube.com/embed/{{ media.url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
@@ -130,6 +130,8 @@
 								{{comment.user.username}}</i>
 							le
 							{{comment.createdAt | date('d/m/Y') }}
+							à
+							{{ figure.updateAt | date('H:i') }}
 						</div>
 					</div>
 

@@ -21,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class FigureController extends AbstractController
@@ -90,10 +91,19 @@ class FigureController extends AbstractController
             $i = 0;
 
             $existFigure = $figureRepo->findOneBy(['title' => $title]);
+
             if (!$figure->getId() && $existFigure != null) {
                 $this->addFlash('warning', 'cette figure existe déjà !');
                 return $this->redirectToRoute('app_show_figure', ['slug' => $slug]);
             }
+            if ($existFigure != null) {
+                if ($figure->getId() != $existFigure->getId()) {
+                    $this->addFlash('warning', 'cette figure existe déjà !');
+                    return $this->redirectToRoute('app_show_figure', ['slug' => $slug]);
+                }
+            }
+
+
 
             do {
                 $existSlug = $figureRepo->findOneBy([
