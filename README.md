@@ -3,29 +3,29 @@ snowTricks
 codacy : https://app.codacy.com/gh/Rte29/snowTricks/dashboard?branch=develop
 
 Installation :
-- Céez un dossier portant le nom que vous désirez
+Créez un dossier portant le nom que vous désirez
 
-- Clonez ou téléchargez le repository GitHub dans le dossier que vous venez de créer:
+Clonez ou téléchargez le repository GitHub dans le dossier que vous venez de créer:
 https://github.com/Rte29/snowTricks.git
 
-- Ouvrez le dossier avec votre IDE
+Ouvrez le dossier avec votre IDE
 
-- Editez le fichier .env pour mettre à jour DATABASE_URL et MAILER_DSN vous pouvez également passer APP_ENV=prod au lieu de dev.
+Editez le fichier .env pour mettre à jour DATABASE_URL et MAILER_DSN vous pouvez également passer APP_ENV=prod au lieu de dev.
 
-- Ouvrez un terminal
+Ouvrez un terminal
 
-- Installer les dépendances avec composer
+Installer les dépendances avec composer
 composer install
 
-- Créer une base de données:
+Créer une base de données:
 php bin/console doctrine:database:create
 
-- Importer les entités:
+Importer les entités:
 php bin/console doctrine:migrations:migrate
 
-- lancer le serveur local:
+Lancer le serveur local:
 symfony serve
 
-option: 
-- si vous utilisez gmail, lancez la synchronisation: 
+Option: 
+Si vous utilisez gmail, lancez la synchronisation: 
 php bin/console messenger:consume async
