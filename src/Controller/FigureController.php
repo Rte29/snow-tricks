@@ -59,9 +59,9 @@ class FigureController extends AbstractController
         );
     }
 
-    #[Route('/ajouter', name: 'app_add_figure')]
-    #[Route('/modifier/{slug}', name: 'app_edit_figure')]
-    public function form(Figure $figure = null, Request $request, EntityManagerInterface $em, FigureRepository $figureRepo, MediaRepository $mediaRepo, CategoryRepository $categoryRepo, $slug = null): Response
+    #[Route('/figures/ajouter', name: 'app_add_figure')]
+    #[Route('/figures/modifier/{slug}', name: 'app_edit_figure')]
+    public function editFigure(Figure $figure = null, Request $request, EntityManagerInterface $em, FigureRepository $figureRepo, MediaRepository $mediaRepo, CategoryRepository $categoryRepo, $slug = null): Response
     {
 
         if ($this->getUser() == null) {
@@ -186,8 +186,8 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/figures/editer/{slug}', name: 'app_show_figure')]
-    public function show(EntityManagerInterface $em, PaginatorInterface $paginator, UserRepository $user, Request $request, Figure $figure, Media $media, $slug): Response
+    #[Route('/figures/{slug}', name: 'app_show_figure')]
+    public function showFigure(EntityManagerInterface $em, PaginatorInterface $paginator, UserRepository $user, Request $request, Figure $figure, Media $media, $slug): Response
     {
         $repo = $em->getRepository(Figure::class);
         $figure = $repo->findOneBy(['slug' => $slug]);
@@ -226,7 +226,7 @@ class FigureController extends AbstractController
             'commentForm' => $commentForm->createView()
         ]);
     }
-    #[Route('/supprimer/media/{id}', name: 'app_delete_media')]
+    #[Route('/media/supprimer/{id}', name: 'app_delete_media')]
     public function deleteMedia(Media $media, EntityManagerInterface $em, MediaRepository $mediaRepo,)
     {
         $slug = $media->getFigure()->getSlug();
@@ -263,7 +263,7 @@ class FigureController extends AbstractController
     }
 
     #[Route('/figures/supprimer/{id}', name: 'app_delete_figure')]
-    public function delete(EntityManagerInterface $em, Figure $figure) //: Response
+    public function deleteFigure(EntityManagerInterface $em, Figure $figure) //: Response
     {
         foreach ($figure->getMedia() as $media) {
 

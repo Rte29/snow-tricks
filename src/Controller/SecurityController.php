@@ -9,8 +9,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/connexion', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    #[Route(path: '/utilisateur/connexion', name: 'app_login')]
+    public function loginUser(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -27,8 +27,8 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
+    #[Route(path: '/utilisateur/logout', name: 'app_logout')]
+    public function logoutUser(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
