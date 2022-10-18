@@ -2,10 +2,13 @@ snowTricks
 
 codacy : https://app.codacy.com/gh/Rte29/snowTricks/dashboard?branch=develop
 
+Configuration requise:
+PHP 8.1 - Symfony 6 - Symfony CLI - 
+
 Installation :
 Créez un dossier portant le nom que vous désirez
 
-Clonez ou téléchargez le repository GitHub dans le dossier que vous venez de créer:
+Clonez ou téléchargez la branche main du repository GitHub dans le dossier que vous venez de créer:
 https://github.com/Rte29/snowTricks.git
 
 Ouvrez le dossier avec votre IDE
