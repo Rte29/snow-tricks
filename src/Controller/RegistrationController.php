@@ -40,8 +40,8 @@ class RegistrationController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    #[Route('/inscription', name: 'app_register')]
-    public function register(Request $request, MailerInterface $mailer, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    #[Route('/utilisateur/inscription', name: 'app_register')]
+    public function registerUser(Request $request, MailerInterface $mailer, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -90,8 +90,8 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/activate/{token}', name: 'activate')]
-    public function activate($token, EntityManagerInterface $manager, UserRepository $userRepo): Response
+    #[Route('/utilisateur/activation/{token}', name: 'activate')]
+    public function activateToken($token, EntityManagerInterface $manager, UserRepository $userRepo): Response
     {
         $user = $userRepo->findOneBy(['token' => $token]);
         if ($user == null) {
@@ -112,7 +112,7 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/mot-de-passe-oublie', name: 'app_forgot')]
+    #[Route('/utilisateur/mot-de-passe-oublie', name: 'app_forgot')]
     public function forgotPassword(EntityManagerInterface $manager, MailerInterface $mailer, Request $request, UserRepository $userRepo): Response
     {
 
@@ -152,7 +152,7 @@ class RegistrationController extends AbstractController
         return $this->render('security/forgot.html.twig', []);
     }
 
-    #[Route('/nouveau-mot-de-passe/{token}', name: 'app_reset')]
+    #[Route('/utilisateur/nouveau-mot-de-passe/{token}', name: 'app_reset')]
     public function resetPassword(EntityManagerInterface $manager, $token, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, Request $request, UserRepository $userRepo): Response
     {
 

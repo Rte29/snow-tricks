@@ -3,9 +3,7 @@
 {% form_theme registrationForm 'bootstrap_4_layout.html.twig' %}
 
 {% block title %}
-	<title>
-		Inscription
-	</title>
+	Inscription
 {% endblock %}
 
 {% block hero %}{% endblock %}
@@ -25,5 +23,10 @@
 
 		<br><button type="submit" class="btn btn-primary">S'enregistrer</button>
 		{{ form_end(registrationForm) }}
+		<hr>
+		<h3>
+			Important :
+			<br>Un mail de vérification de votre adresse va vous être envoyé contenant un le lien.
+			<br>Cliquez sur ce lien pour valider votre inscription.</h3>
 	</div>
 {% endblock %}
