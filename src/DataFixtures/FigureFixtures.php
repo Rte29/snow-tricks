@@ -83,8 +83,6 @@ class FigureFixtures extends Fixture implements DependentFixtureInterface
             ];
 
             $videoKey = array_rand($vdo, 1);
-            dump($videoKey);
-            dump($vdo[$videoKey]['url']);
             $video = new Media();
             $video->setUrl($vdo[$videoKey]['url']);
             $video->setMain(false);

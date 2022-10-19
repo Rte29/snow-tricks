@@ -67,7 +67,7 @@ class RegistrationController extends AbstractController
             $mail = (new Email())
                 ->from("snowtricksinfo@gmail.com")
                 ->to($user->getEmail())
-                ->text("Voici votre lien de verification de mail https://127.0.0.1:8000/activate/" . $token)
+                ->text("Voici votre lien de verification de mail https://127.0.0.1:8000/utilisateur/activation/" . $token)
                 ->subject("Activation de compte sur SnowTricks pour " . $user->getUserName());
 
 
