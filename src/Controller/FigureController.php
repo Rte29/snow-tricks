@@ -284,8 +284,8 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/privee', name: 'app_private')]
-    public function private(): Response
+    #[Route('/vie_privee', name: 'app_private')]
+    public function privateLife(): Response
     {
         return $this->render('partials/private.html.twig');
     }
