@@ -29,6 +29,8 @@ php bin/console doctrine:migrations:migrate
 Lancer le serveur local:
 symfony serve
 
+Pour se connecter, récuperer un nom d'utilisateur dans la base de données dont l'attribut "activated" est à 1. Le mot de passe est "azerty"
+
 Option: 
 Si vous utilisez gmail, lancez la synchronisation: 
 php bin/console messenger:consume async
